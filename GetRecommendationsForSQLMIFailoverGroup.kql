@@ -1,0 +1,6 @@
+.create-or-alter function with (docstring = "Get Subscription, resource gruop and Azure SQL Managed Instance servers that don\'t have failover groups enabled.",folder = "AzureAdvisor") GetRecommendationsForSQLMIFailoverGroup() {
+macro-expand SqlTelemetryProd as X
+    X.MonAnalyticsDBSnapshot
+    | where service_level_objective matches regex "MI.*" and state == "Ready" and isempty(failover_group_id) == true
+    | distinct logical_server_name, resource_group, customer_subscription_id, region_name, failover_group_id
+}
